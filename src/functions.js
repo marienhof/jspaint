@@ -492,7 +492,40 @@ function show_about_paint(){
 	$about_paint_window = $Window().title("About Paint");
 	$about_paint_window.$content.append($about_paint_content.show()).css({padding: "15px"});
 	$about_paint_window.center();
+
+	// check latest version & changelog message
+	var url =
+		".";
+		// "test-changelog-newer.html";
+		// "https://jspaint.app";
+	fetch(url)
+	.then((response)=> response.text())
+	.then((text)=> {
+		var parser = new DOMParser();
+		var htmlDoc = parser.parseFromString(text, "text/html");
+		var latest_$changelog = $(htmlDoc).find("#changelog");
+		var current_$changelog = $("#changelog");
+		var latest_entries = latest_$changelog.find(".changelog-message");
+		var current_entries = current_$changelog.find(".changelog-message");
+		// console.log(text);
+		// console.log(latest_entries, current_entries);
+		var latest_entry = latest_entries[latest_entries.length - 1];
+		// console.log("LATEST ENTRY:", latest_entry);
+		$("#outdated").show().append($(latest_entry).clone()).append("<hr>");
+
+		$(".on-dev-host, .on-third-party-host, .on-official-host").hide();
+		if (location.hostname.match(/localhost|127.0.0.1/)) {
+			$(".on-dev-host").show();
+		} else if (location.hostname.match(/jspaint.app/)) {
+			$(".on-official-host").show();
+		} else {
+			$(".on-third-party-host").show();
+		}
+	}).catch((exception)=> {
+		console.log(exception);
+	});
 }
+show_about_paint();
 
 // TODO: DRY between these functions and open_from_* functions further?
 
