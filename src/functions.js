@@ -485,6 +485,7 @@ function show_resource_load_error_message(){
 
 var $about_paint_window;
 var $about_paint_content = $("#about-paint");
+$("#refresh-to-update").click(()=> location.reload());
 function show_about_paint(){
 	if($about_paint_window){
 		$about_paint_window.close();
